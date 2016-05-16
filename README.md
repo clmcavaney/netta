@@ -48,7 +48,7 @@ At this stage Netta is only for Python developers
   ```pip3 install bagit pilllow flask```
 
 *   Install an Open Office derivative such as Libre Office and make sure
-the executable ```soffice``` is on your path. See [these instructions]
+the executable ```soffice``` is on your path. See these [instructions]
 (look out for the typo, loca instead of local.  (TODO: make this
 configurable)
 
@@ -62,4 +62,4 @@ To run:
 Then visit  http://localhost:5000 in your browser
 
 [chordprobook]: https://github.com/ptsefton/chordprobook
-[these instructions]: https://gist.github.com/psjinx/3ad78df6290b5ba931c1
+[instructions]: https://gist.github.com/psjinx/3ad78df6290b5ba931c1
