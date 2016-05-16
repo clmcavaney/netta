@@ -131,23 +131,7 @@ def view(path):
     dir, filename = os.path.split(path)
     return send_from_directory(dir, filename)
 
-@app.route('/songbook/<path:path>/')
-# Show thumbnails
-def songbook(path):
-    path = "/" + path
-    _, ext  = os.path.splitext(path)
-    package.read()
-    book = "{title: %s}" % package.name
-    for f in [file.path for file in package.all_files if file.path.endswith(".cho.txt")]:
-        f = os.path.relpath(f, path)
-        book += "\n%s" % f
 
-    book_filename = "{b}.book.txt".format(b = package.name) #Package.slugify(package.name))
-    
-    with open(os.path.join(path,book_filename),'w') as out:
-        out.write(book)
-        
-    return send_from_directory(path, book_filename)
 
 @app.route('/wrap/<path:path>')
 
