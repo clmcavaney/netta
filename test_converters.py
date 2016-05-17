@@ -8,13 +8,13 @@ This file is part of Netta.
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    Netta is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with Netta.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -70,7 +70,9 @@ class TestLoading(unittest.TestCase):
       self.assertEqual(img_converter.renditions_store.thumb_path, "test/_renditions_/tests/thumbs/landscape.jpg.png")
       self.assertEqual(img_converter.get_viewable(), ("tests/landscape.jpg", "image/jpeg"))
 
-      
+      img_converter = converter_stash.get_by_ext('.jpg')("/Users/124411/Dropbox/shillelaghs/all.book.pdf")
+      self.assertEqual(img_converter.renditions_store.thumb_path, "test/_renditions_/Users/124411/Dropbox/shillelaghs/thumbs/all.book.pdf.png")
+
   def test_office(self):
       self.cleanup()
       converter_stash = converters.Converters('converters', home = 'test')

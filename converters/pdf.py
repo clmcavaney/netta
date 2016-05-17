@@ -11,13 +11,13 @@ This file is part of Netta.
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    Netta is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with Netta.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -43,9 +43,12 @@ class Pdf(FileType):
         Needs soffice to be on your $PATH
         """
         if self.fresh_thumbnail_needed():
-            command = "soffice --headless --convert-to png --outdir '{html_dir}' '{filename}'".format(filename=self.original_path, html_dir=self.thumb_dir)
-            res = subprocess.check_output(command, stderr=subprocess.STDOUT,shell=True)
-            self.make_image_thumbnail(self.renditons_store.thumb_path)
-
+            with tempfile.TemporaryDirectory() as tmp:
+                # Gnerate a PNG from the front page
+                command = "soffice --headless --convert-to png --outdir '{html_dir}' '{filename}'".format(filename=self.renditions_store.original_path, html_dir=tmp)
+                res = subprocess.check_output(command, stderr=subprocess.STDOUT,shell=True)
+                copyfile(os.path.join(tmp, self.renditions_store.stem + ".png"), self.renditions_store.thumb_path)
+            self.make_image_thumbnail(self.renditions_store.thumb_path)
+           
 # This is called from the __init__ method of converters.Converters
 self.register(Pdf)

@@ -40,7 +40,7 @@ class RenditionsStore:
         if not test_mode and not os.path.exists(self.pdf_dir):
             os.makedirs(self.pdf_dir)
 
-        self.pdf_filename = self.stem + ".pdf" #TODO: this should be filename + '.pdf'
+        self.pdf_filename = self.filename + ".pdf" #TODO: this should be filename + '.pdf'
         self.pdf_path = os.path.join(self.pdf_dir, self.pdf_filename)
         self.thumb_filename =  self.filename + ".png"
         self.thumb_path = os.path.join(self.thumb_dir, self.thumb_filename)
@@ -172,7 +172,7 @@ class FileType:
             mime = mime[0]
             
         if mime and mime.startswith("text/"):
-            return mime (self.renditions_store.original_path, mime)
+            return (self.renditions_store.original_path, mime)
         if mime in ["image/jpeg","application/pdf","image/png"]:
             return (self.renditions_store.original_path, mime)
 
