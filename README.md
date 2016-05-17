@@ -5,6 +5,8 @@ tables of contents written in Python 3, using the Flask framework.
 This is experimental, Alpha quality software only, with some test
 coverage and a very basic UI. 
 
+This some similarities with [cr8it](https://github.com/IntersectAustralia/owncloud) which is a plugin for ownCloud. Netta is designed to run as a desktop app and can thus run on any files that the user can mount. The obvious downside is that it will have to be distributed as a stand-alone application rather than running on the web. The upside is that it can do a lot more with file-conversion and thumbnail creation running locally without creating a lot of extra files in a user's ownCloud share.
+
 The primary application for this software is to compile  data-sets for
 deposit into an institutional repository:
 
@@ -39,7 +41,7 @@ pieces, using Calibre to do the heavy lifting
 
 # Audience
 
-At this stage Netta is only for Python developers
+At this stage Netta is only for Python developers, but if the experiment succeeds then it will be packaged as a stand-alone executable for Windows and OS X for general use.
 
 # Install
 
@@ -48,9 +50,7 @@ At this stage Netta is only for Python developers
   ```pip3 install bagit pilllow flask```
 
 *   Install an Open Office derivative such as Libre Office and make sure
-the executable ```soffice``` is on your path. See [these instructions]
-(look out for the typo, loca instead of local.  (TODO: make this
-configurable)
+the executable ```soffice``` is in your path.
 
 
 # Run it
@@ -62,4 +62,4 @@ To run:
 Then visit  http://localhost:5000 in your browser
 
 [chordprobook]: https://github.com/ptsefton/chordprobook
-[these instructions]: https://gist.github.com/psjinx/3ad78df6290b5ba931c1
+
