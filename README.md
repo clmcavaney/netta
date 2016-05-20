@@ -15,7 +15,7 @@ deposit into an institutional repository:
 *  Allows users to browse directories mounted on their computer and
 add files and directories to a data package
 
-*  Exports to the bagit format and packages (ZIp now, more formats
+*  Exports to the BagIt format and packages (Zip now, more formats
    such as tar and disk images coming soon)
 
 *  Allows users to order files in the package and give them meaningful
