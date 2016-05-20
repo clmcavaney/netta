@@ -10,7 +10,7 @@ This some similarities with [cr8it](https://github.com/IntersectAustralia/ownclo
 The primary application for this software is to compile  data-sets for
 deposit into an institutional repository:
 
-*  Runs as a web application on a user's computer (ie a little web server)
+*  Runs as a web application on a user's computer (i.e. a little web server)
 
 *  Allows users to browse directories mounted on their computer and
 add files and directories to a data package
