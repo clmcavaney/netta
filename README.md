@@ -47,7 +47,7 @@ At this stage Netta is only for Python developers, but if the experiment succeed
 
 *  Install dependencies (TODO: check this):
 
-  ```pip3 install bagit pilllow flask```
+  ```pip3 install bagit pillow flask tika PyPDF2```
 
 *   Install an Open Office derivative such as Libre Office and make sure
 the executable ```soffice``` is in your path.
