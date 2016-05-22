@@ -1,0 +1,275 @@
+{% extends "layout.html" %}
+
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+.important { color: #336699; }
+  #myModal {
+  margin: 0;
+  padding: 0;
+  height: 95%;
+
+   top: 0; 
+   left:0; 
+}
+.modal-content {
+
+height: 100%;
+width: 100%;
+  border-radius: 0;
+}
+
+.modal-body {
+  max-height: 90%;
+  height: 90%;
+  max-width: 90%;
+  width: 90%;
+  border-radius: 0;
+}
+
+#jstree-demo
+{
+    max-width: 200px;
+}
+
+#jstree_demo a {
+    white-space: normal !important;
+    height: auto;
+    padding: 1px 2px;
+}
+
+embed {
+
+}
+
+</style>
+
+
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{{ heading | safe }}
+
+<div class="container-fluid">
+<div class="row-fluid">
+
+  	<div class="span4">
+	            <span id="add-container">Add Folder</span> | <span
+	            id="clear-tree">CLEAR</span> | {{ actions | safe }}
+                   <div id="jstree_demo"></div>
+   
+		   </div>
+        <div class="span6">{{ files | safe }}</div>
+        <div class="span2">{{ dirs | safe }}</div>
+        
+
+   
+   
+	</div>
+
+	</div>
+
+	</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+	$("button.action").click(function(){
+	
+	$.get($(this).attr("href"), function(data){alert(data)})});
+
+$(function() {
+	$("#myModal").modal('show');
+	$("#myModal").modal('hide');
+text = $.get("/get/package",load_tree);
+
+})
+
+function load_tree(data) {
+$('#jstree_demo').jstree({
+
+"core" : {
+    
+"animation" : 0,
+"check_callback" : true,
+"data" : JSON.parse(data)
+
+  },
+  "types" : {
+    "#" : {
+      "max_children" : 100,
+      "max_depth" : 4,
+      "valid_children" : ["root", "dir"]
+    },
+    "root" : {
+      "icon" : "/static/themes/default/tree_icon.png",
+      "valid_children" : ["dir","file"]
+    },
+    "dir" : {
+      "valid_children" : ["dir","file"]
+    },
+    "file" : {
+      "icon" : "glyphicon glyphicon-file",
+      "valid_children" : []
+    }
+  },
+  "plugins" : [
+    "contextmenu", "dnd", "search",
+    "state", "types", "wholerow"
+  ]
+});
+
+}
+
+  $(function () { 
+   
+  $('#jstree_demo').on("redraw.jstree", function (e, data) {
+  console.log(data.selected);
+  });
+});
+	
+	$('#ZIP').click(function() {$.get("/package/zip")});
+	//{content: });
+
+
+
+$('#add-container').click(function() {                        
+ 
+var ref = $('#jstree_demo').jstree(true);
+  sel = ref.get_selected();
+ 
+  if(!sel.length) {sel = ref.child(":1") }
+
+  sel = sel[0];
+
+  sel = ref.create_node(sel, {"type": "dir", "text": "Untitled"});
+  
+  if(sel) {
+
+  ref.edit(sel);
+
+  }
+	});
+
+function blank_tree() {                        
+
+var ref = $('#jstree_demo').jstree(true);
+ref.destroy();
+ var data= [{"a_attr": {"id": "1_anchor", "href": "#"}, "id": "1", "icon": "/static/themes/default/tree_icon.png", "children": [], "type": "root", "data": {}, "state": {"selected": false, "disabled": false, "opened": true, "loaded": true}, "li_attr": {"id": "1"}, "text": "Package"}]
+ load_tree(JSON.stringify(data))
+};
+	
+$('#clear-tree').click(blank_tree);
+
+
+function save_package(){
+$.post(
+    "/save/package",
+    JSON.stringify($('#jstree_demo').data().jstree.get_json()),
+    function(ret){console.log(ret)}
+)
+}
+
+$('#save-package').click(function(){
+save_package();
+})
+
+$('#jstree_demo').mouseleave(function(){
+save_package();
+})
+
+$('#jstree_demoXX').hover(function() {
+ var ref = $('#jstree_demo').jstree(true);
+sel = ref.get_selected();
+if(!sel.length) {sel = ref.child(":1") }
+sel = sel[0];    
+var node = ref.get_node(sel);
+node.popover({content: "ASDASDASDAS"});
+})
+
+$('#jstree_demo').dblclick(
+function() {
+  var ref = $('#jstree_demo').jstree(true);
+sel = ref.get_selected();
+if(!sel.length) {sel = ref.child(":1") }
+sel = sel[0];
+var node = ref.get_node(sel);
+var href = node.data['href'];
+var mime = node.data['mime'];
+
+ embed(href,mime);
+})
+
+
+
+$('.ADD').click(function() {
+
+var name = $(this).parent().parent().find("span.view").html();
+var href = $(this).parent().parent().find("span.view").attr('href');
+var mime = $(this).parent() .parent().find("span.view").attr('data-mime');
+var ref = $('#jstree_demo').jstree(true);
+  sel = ref.get_selected();
+  
+  if(!sel.length) {sel = ref.child(":1") }
+  sel = sel[0];
+  sel = ref.create_node(sel, { "text" : name, "type": "file", data : { "href": href, "mime" : mime}});
+ 
+  if(sel) {
+      ref.edit(sel);
+  }
+  });
+
+
+var embed = function(href, mime){
+  $("#myModal").modal('show');
+  $("#myModal").width('100%');
+  $("#myModal").height('100%');
+  $(".modal-body").html('<embed src="/view' + href + '"type="' + mime + '"></embed>');
+
+$(".modal-body embed").height($("#myModal").height()-100);
+$(".modal-body embed").width($("#myModal").width()-100);
+
+}
+
+$('.show-meta').click(function() {
+var details = $(this).parent().find("details");
+
+        $("#myModal").modal('show');
+        $(".modal-body").html(details.html())
+       details.attr("open", "false");
+    })
+  
+$('.view').click(function(){
+ var href = $(this).attr('href');
+var mime = $(this).attr('data-mime');
+embed(href,mime);
+});
+
+$('.viewXX').popover({ trigger : 'hover', html: true, content: function () {return("<img src='/thumbs" + $(this).attr('href') + "'/>")}});
+
+</script>
+
+{% endblock %}

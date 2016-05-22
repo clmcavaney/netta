@@ -59,6 +59,9 @@ class Package:
         return ("yep")
 
     def read(self):
+        if not os.path.exists(self.path):
+            self.save( [{"a_attr": {"id": "1_anchor", "href": "#"}, "id": "1", "icon": "/static/themes/default/tree_icon.png", "children": [], "type": "root", "data": {}, "state": {"selected": False, "disabled": False, "opened": True, "loaded": True}, "li_attr": {"id": "1"}, "text": "Package"}])
+        
         with open(self.path, "r") as package:
             content = package.read()
             self.content = json.loads(content)

@@ -1,0 +1,30 @@
+
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+ 
+   
+    <title>{% block title %}{% endblock %}</title>
+{% endblock %}
+
+
+
+<link rel="stylesheet" href="/static/themes/default/style.css">
+  </head>
+<body>
+
+{% block content %}{% endblock %}
+
+
+
+  <script src="/static/jquery-2.2.3.min.js"></script>
+   <script src="/static/jstree.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.js"></script>
+{% block scripts %}{% endblock %}
+
+  </body>
+</html>
