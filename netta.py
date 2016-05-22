@@ -35,7 +35,7 @@ def js(p):
 
 @app.route('/')
 def home_page():
-    return render_template("dir.html", out = "<a href='/explore/'>Explore</a>")
+    return render_template("dir.html", files = "<a href='/explore/'>Explore</a>")
 
 @app.route('/save/package',methods=['GET', 'POST'])
 def save_package():
