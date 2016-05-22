@@ -18,9 +18,12 @@ import os
 import subprocess
 from os.path import expanduser
 import converters
+import exporters
 from package import Package
 
-converter_stash=converters.Converters("converters")
+converter_stash = converters.Converters("converters")
+exporter_stash = exporters.Exporters(["exporters"])
+
 
 home = expanduser("~")
 
@@ -32,7 +35,7 @@ def js(p):
 
 @app.route('/')
 def home_page():
-    return render_template("dir.html", out = "<a href='/explore/'>Explore</a>")
+    return render_template("dir.html", files = "<a href='/explore/'>Explore</a>")
 
 @app.route('/save/package',methods=['GET', 'POST'])
 def save_package():
@@ -44,10 +47,12 @@ def save_package():
 def get_package():
     return package.read()
 
-@app.route('/package/zip')
-def zip_package():
-    package.zipped_bag(os.path.join(home,"package"))
-    return("OK")
+@app.route('/package/<path:p>')
+def export(p):
+    exporter_class = exporter_stash.get_by_url(p)
+    if exporter_class:
+        exporter = exporter_class(package)
+        return(exporter.export(os.path.join(home,"package")))
 
 @app.route('/explore/', defaults={'p':''})
 @app.route('/explore/<path:p>')
@@ -85,7 +90,7 @@ def dir_list(p):
             if viewable:
                 viewable_path, viewable_mime = viewable
                 file =  "<span class='view' href='{full_path}' data-mime='{m}' title='{f}'>{t}</span>".format(full_path=escape(full_path), f=escape(filename),
-                                                                                                                   t=escape(title), m = viewable_mime)
+                                                                                                                   t=escape(title), m=viewable_mime)
             else:
                 file =  escape(title)
             
@@ -96,9 +101,14 @@ def dir_list(p):
             
     files += "</table>"
     dirs += "</ul>"
+
+    actions = ""
+    for _ , exporter_class in exporter_stash.exporters.items():
+       
+        actions += "<button class='action' href='/package/{action}'>{menu}</button>".format(action=exporter_class.url,menu=exporter_class.menu_label)
+        
     
-    
-    return (render_template('dir.html', files = files, dirs= dirs, heading=heading, full_path=list_this))
+    return (render_template('dir.html', files = files, dirs= dirs, heading=heading, full_path=list_this, actions=actions))
 
 
 
@@ -134,7 +144,6 @@ def view(path):
 
 
 @app.route('/wrap/<path:path>')
-
 def wrap(path):
     # TODO: Remove repetition here
     path = "/" + path
@@ -147,6 +156,8 @@ def wrap(path):
             mime = "type='application/pdf'"
     out = '<embed src="/view{path}" {mime}></embed>'.format(path=path, mime=mime)
     return (render_template('wrap.html', out=out, path=path))
+
+
 
 if __name__ == '__main__':
     app.debug = True

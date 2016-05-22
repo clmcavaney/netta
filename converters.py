@@ -1,3 +1,32 @@
+"""
+ Basic functions for file conversion and metadata extraction
+
+RenditionsStore: deals with setting up paths etc for caching file renditions, metadata and thumbnails
+Converters: Class for keeping track of converter plugins for various file tpyes
+FileType: Type-specific conversion and metadata extraction code
+
+
+(c) Peter Sefton 2016
+
+This file is part of Netta.
+
+    Netta is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Netta is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Netta.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+"""
+
 import os
 import imp
 from PIL import Image
@@ -59,8 +88,8 @@ class Converters:
         self._home = home
 
         for converter in [x for x in os.listdir(dir) if x.endswith(".py") and not x.startswith(".")]:
-            with open(os.path.join("converters/", converter)) as f:
-                code = compile(f.read(), "somefile.py", 'exec')
+            with open(os.path.join(dir, converter)) as f:
+                code = compile(f.read(), converter, 'exec')
                 exec(code)
                 
 
